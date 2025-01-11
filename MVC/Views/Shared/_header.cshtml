@@ -1,0 +1,96 @@
+﻿@using System.Globalization
+
+@inject UserService UserService
+
+@using MVC.Helpers
+@using MVC.Resources
+@inject LanguageService ShareLocalizer
+
+@{
+    var user = UserService.GetSessionUser();
+}
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom mb-3 px-3" style="box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);">
+        <div class="container-fluid">
+            <a class="navbar-brand mb-1" asp-controller="Home" asp-action="Index">Customer Onboarding</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse">
+                <ul class="navbar-nav me-auto mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark @(ViewBag.ActiveTab == "Home" ? "active" : "")"
+                            asp-controller="Home" asp-action="Index">
+                            @ShareLocalizer.GetLocalizedHTML("home")
+                        </a>
+                    </li>
+                    @if (user.Role == "SupplyAdmin")
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark @(ViewBag.ActiveTab == "Supplier" ? "active" : "")"
+                               asp-controller="Supplier" asp-action="Index">
+                                @ShareLocalizer.GetLocalizedHTML("suppliers")
+                            </a>
+                        </li>
+                    }
+                    <li class="nav-item">
+                        <a class="nav-link text-dark @(ViewBag.ActiveTab == "Order" ? "active" : "")"
+                           asp-controller="Order" asp-action="Index">
+                            @ShareLocalizer.GetLocalizedHTML("orders")
+                        </a>
+                    </li>
+                    @if (user.Role == "SupplyAdmin")
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark @(ViewBag.ActiveTab == "Log" ? "active" : "")"
+                             asp-controller="Log" asp-action="Index">
+                                @* @ShareLocalizer.GetLocalizedHTML("Log") *@
+                                Logs
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="dropdown">
+                <button type="button" class=" btn btn-secondary dropdown-toggle me-3" id="languageDropdown" data-bs-toggle="dropdown">
+                    @if (CultureInfo.CurrentCulture.Name == "en-US")
+                    {
+                        @ShareLocalizer.GetLocalizedHTML("english")
+                    }
+                    else if (CultureInfo.CurrentCulture.Name == "tr-TR")
+                    {
+                        @ShareLocalizer.GetLocalizedHTML("turkish")
+                    }
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-end me-3" aria-labelledby="languageDropdown" style="box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);">
+                    <li class="text-center">
+                        <a asp-controller="Home" asp-action="ChangeLang" asp-route-culture="en-US" class="dropdown-item">@ShareLocalizer.GetLocalizedHTML("english")</a>
+                        <a asp-controller="Home" asp-action="ChangeLang" asp-route-culture="tr-TR" class="dropdown-item">@ShareLocalizer.GetLocalizedHTML("turkish")</a>
+
+                    </li>
+                </ul>
+            </div>
+
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-dark text-decoration-none" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-user-circle" style="font-size:40px; color:gray;"></i>
+                    @* <img src="~/images/user.png" alt="User Image" class="img-fluid rounded-circle mb-2" style="width: 50px; height: 50px;" /> *@
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" style="box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);">
+                    <li class="dropdown-item text-center">
+                        <i class="fas fa-user-circle mb-3" style="font-size:55px; color:gray;"></i>
+                        <p class="mb-0"><strong> @user.FullName</strong></p>
+                        <p class="mb-0"><strong> @user.Email</strong></p>
+                        <p class="mb-0"><strong> @user.Role</strong></p>
+                        <p class="mb-0"><strong> @user.SicilNo</strong></p>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" asp-controller="Home" asp-action="UserDetay">Bilgilerim</a></li>
+                    <li><a class="dropdown-item" asp-controller="Account" asp-action="SignOut">Çıkış</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

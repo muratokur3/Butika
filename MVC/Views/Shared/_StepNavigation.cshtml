@@ -1,0 +1,22 @@
+﻿@using MVC.Resources
+@inject LanguageService ShareLocalizer
+@{
+	var currentStep = ViewBag.CurrentStep ?? 1;
+}
+
+<div class="my-5" style="display:flex; justify-content:center" >
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb py-3 px-5 mb-0" style="box-shadow:0 0 4px 5px rgba(0, 0, 0, 0.1); border-radius:18px;">
+			<li class="breadcrumb-item @(currentStep == 1 ? "active fw-bold text-danger" : (currentStep > 1 ? "text-success" : "text-secondary"))">
+				@ShareLocalizer.GetLocalizedHTML("selectingAsupplier")
+			</li>
+			<li class="breadcrumb-item @(currentStep == 2 ? "active fw-bold text-danger" : (currentStep > 2 ? "text-success" : "text-secondary"))">
+				@ShareLocalizer.GetLocalizedHTML("ProductEntry-ExcelUpload")
+			</li>
+			<li class="breadcrumb-item @(currentStep == 3 ? "active fw-bold text-danger" : (currentStep > 3 ? "text-success" : "text-secondary"))">
+				@ShareLocalizer.GetLocalizedHTML("orderdetail")
+			</li>
+		</ol>
+	</nav>
+</div>
+

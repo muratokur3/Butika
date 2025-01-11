@@ -1,0 +1,80 @@
+﻿<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+@*Supplier Input Kontrol*@
+<script>
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            var forms = document.getElementsByClassName('needs-validation');
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+
+@*Excel type kontrol*@
+<script>
+    document.getElementById('excelFile').addEventListener('change', function () {
+        var fileInput = document.getElementById('excelFile');
+        var filePath = fileInput.value;
+        var allowedExtensions = /(\.xlsx|\.xls)$/i;
+
+        if (!allowedExtensions.exec(filePath)) {
+            document.getElementById('fileError').textContent = 'Lütfen sadece .xlsx veya .xls dosyaları yükleyin.';
+            fileInput.value = '';
+        } else {
+            document.getElementById('fileError').textContent = '';
+            // document.getElementById('uploadExcelForm').submit();
+        }
+    });
+</script>
+
+
+@*Orders toggleAccordionButton*@
+<script>
+    document.getElementById('toggleAccordionButton').addEventListener('click', function () {
+        const isOpen = this.textContent.trim() === 'Close All';
+        document.querySelectorAll('.accordion-collapse').forEach(item => {
+            if (isOpen) {
+                item.classList.remove('show');
+            } else {
+                item.classList.add('show');
+            }
+        });
+        this.textContent = isOpen ? 'Open All' : 'Close All';
+    });
+
+    // Scroll to Top Button
+    const scrollToTopButton = document.getElementById('scrollToTopButton');
+    window.addEventListener('scroll', function () {
+        if (window.scrollY > 300) {
+            scrollToTopButton.style.display = 'block';
+        } else {
+            scrollToTopButton.style.display = 'none';
+        }
+    });
+
+    scrollToTopButton.addEventListener('click', function () {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+</script>
+
+<script>
+    setTimeout(function () {
+        var successMessage = document.getElementById('successMessage');
+        if (successMessage) {
+            successMessage.style.display = 'none';
+        }
+    }, 6000);
+</script>

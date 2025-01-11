@@ -1,0 +1,63 @@
+﻿@using MVC.Helpers
+@model SupplierDTO
+@inject UserService UserService
+@{
+    var user = UserService.GetSessionUser();
+    ViewData["Title"] = "Add Supplier";
+}
+
+<div class="container mt-4">
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div id="successMessage" class="alert alert-danger text-center">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+    <div class="text-center mb-4">
+        <h5>Yeni Tedarikçi Ekle</h5>
+        <hr />
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="AddSupplier" method="post" class="needs-validation" novalidate>
+                <input type="hidden" asp-for="InsertBy" value="@user.SicilNo" />
+                <div class="form-group mb-3">
+                    <label asp-for="SupplierName" class="form-label"></label>
+                    <input asp-for="SupplierName" class="form-control" required/>
+                    @* <span asp-validation-for="SupplierName" class="text-danger"></span> *@
+                    <div class="invalid-feedback mb-4 text-start" style="font-size: 1rem;">
+                        Tedarikçi Adı alanı zorunludur.
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="SupplierCode" class="form-label"></label>
+                    <input asp-for="SupplierCode" class="form-control" required/>
+                    @* <span asp-validation-for="SupplierCode" class="text-danger"></span> *@
+                    <div class="invalid-feedback mb-4 text-start" style="font-size: 1rem;">
+                        Tedarikçi Kodu alanı zorunludur.
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="NotificationTo" class="form-label"></label>
+                    <input asp-for="NotificationTo" class="form-control" required/>
+                    @* <span asp-validation-for="NotificationTo" class="text-danger"></span> *@
+                    <div class="invalid-feedback mb-4 text-start" style="font-size: 1rem;">
+                        NotificationTo alanı zorunludur.
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg">Kaydet</button>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

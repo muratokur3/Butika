@@ -1,0 +1,131 @@
+﻿@model OperationsVM
+@{
+    ViewBag.ActiveTab = "Home";
+}
+@await Html.PartialAsync("_StepNavigation")
+@if (Model != null)
+{
+    <div class="container" style="width:90%;">
+        <div class="card py-5" style="border: none; box-shadow:0 0 4px 5px rgba(0, 0, 0, 0.1); border-radius:18px;">
+            <h2 class="text-center">@Model.SelectedSupplierName</h2>
+            <div class="card-body p-0 py-3">
+                <ul class="nav nav-tabs justify-content-center mt-3" id="productTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link @(ViewBag.ProductTab == "single" ? "active" : "")" id="single-product-tab" data-bs-toggle="tab" data-bs-target="#single-product" type="button" role="tab" aria-controls="single-product" aria-selected="@(ViewBag.ProductTab == "single")">Tekli Ürün Girişi</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link @(ViewBag.ProductTab == "excel" ? "active" : "")" id="excel-product-tab" data-bs-toggle="tab" data-bs-target="#excel-product" type="button" role="tab" aria-controls="excel-product" aria-selected="@(ViewBag.ProductTab == "excel")">Excel Ürün Girişi</button>
+                    </li>
+                </ul>
+                <div class="tab-content mt-4" id="productTabContent">
+                    @* excel ile ürün yükleme *@
+                    <div class="tab-pane fade @(ViewBag.ProductTab == "excel" ? "show active" : "")" id="excel-product" role="tabpanel" aria-labelledby="excel-product-tab">
+                        <div class="col-md-6 offset-md-3">
+                            <form asp-action="UploadExcel" method="post" enctype="multipart/form-data" id="uploadExcelForm" class="needs-validation" novalidate>
+                                <input type="hidden" asp-for="SelectedSupplierId" />
+                                <input type="hidden" asp-for="SelectedSupplierName" />
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Excel File</label>
+                                    <div class="d-flex align-items-start">
+                                        <div><input type="file" class="form-control" asp-for="ExcelFile" id="excelFile" accept=".xlsx, .xls" required />
+                                        <div class="invalid-feedback mt-3" style="font-size: 1rem;">
+                                            Lütfen sadece .xlsx veya .xls dosyaları yükleyin.
+                                            </div>
+                                        </div>
+                                        <a href="~/Upload_excel.xlsx" download="Upload_excel.xlsx" class="ms-2 mt-2 d-flex align-items-center" style="text-decoration: underline; font-size: 0.9rem;">
+                                            Example
+                                            <i class="ms-1 bi bi-download"></i>
+                                        </a>
+                                    </div>
+
+
+                                </div>
+
+                                <div class="text-center mb-4">
+                                    <a href="@Url.Action("Index", "Home")" class="btn btn-secondary btn-lg">
+                                        Geri Dön
+                                    </a>
+                                    <input type="submit" value="Devam Et" class="btn btn-primary btn-lg" />
+                                </div>
+                                @* hata mesajları *@
+                                @if (ViewBag.ProductTab == "excel")
+                                {
+
+                                    <table class="table table-bordered table-striped table-hover mt-4" style="border-collapse: separate; border-radius: 10px; box-shadow: 0 0 6px 3px rgba(0, 0, 0, 0.1); overflow: hidden;">
+                                        <thead style="background-color: #DCDCDC; color: #B22222;">
+                                            <tr>
+                                                <th class="text-center" style="border-top-left-radius: 10px; color:#696969">Satır</th>
+                                                <th style="border-top-right-radius: 10px;">Error Message</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var error in Model.ErrorMessages)
+                                            {
+                                                var errorParts = error.Split(',');
+                                                <tr>
+                                                    <td class="text-center">@errorParts[0]</td>
+                                                    <td>
+                                                        @for (int i = 1; i < errorParts.Length; i++)
+                                                        {
+                                                            <div>@errorParts[i]</div>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                }
+                            </form>
+                        </div>
+                    </div>
+                    @* tekli ürün girişi *@
+                    <div class="tab-pane fade @(ViewBag.ProductTab == "single" ? "show active" : "")" id="single-product" role="tabpanel" aria-labelledby="single-product-tab">
+                        <div class="col-md-6 offset-md-3">
+                            <form asp-action="singleInputProduct" method="post" class="needs-validation" novalidate>
+                                <input type="hidden" asp-for="SelectedSupplierId" />
+                                <input type="hidden" asp-for="SelectedSupplierName" />
+                                <div class="form-group mb-3">
+                                    <label class="form-label">SKU</label>
+                                    <input type="text" class="form-control" asp-for="SKU" required />
+                                    <div class="invalid-feedback mt-2" style="font-size: 1rem;">
+                                        Lütfen SKU giriniz.
+                                    </div>
+
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Quantity</label>
+                                    <input type="text" class="form-control" asp-for="Quantity" value="@(Model.Quantity == 0 ? "" : Model.Quantity.ToString())" required />
+                                    <div class="invalid-feedback mt-2" style="font-size: 1rem;">
+                                        Lütfen Quantity giriniz.
+                                    </div>
+
+                                </div>
+
+                                <div class="text-center mb-4">
+                                    <a href="@Url.Action("Index", "Home")" class="btn btn-secondary btn-lg">
+                                        Geri Dön
+                                    </a>
+                                    <input type="submit" value="Devam Et" class="btn btn-primary btn-lg" />
+                                </div>
+                                @if (ViewBag.ProductTab == "single")
+                                {
+                                    @foreach (var error in Model.ErrorMessages)
+                                    {
+                                        <div class="col-md-10">
+                                            <span class="text-danger">@error</span>
+                                        </div>
+                                    }
+                                }
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

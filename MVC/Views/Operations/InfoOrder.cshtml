@@ -1,0 +1,72 @@
+﻿@model OrderVM
+@{
+	ViewBag.ActiveTab = "Home";
+}
+@await Html.PartialAsync("_StepNavigation")
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-md-8 d-flex justify-content-end">
+            <h2 class="text-center mb-4">@Model.SupplierName - Order Details</h2>
+        </div>
+        <div class="col-md-4 d-flex justify-content-end">
+            <form asp-action="SendMailExcelFile" method="post">
+                <input type="hidden" name="orderId" value="@Model.Id" />
+                <button type="submit" class="btn btn-primary mb-3">Send Mail Excel file</button>
+            </form>
+        </div>
+    </div>
+
+	<div class="card mb-3">
+		<div class="card-header d-flex justify-content-around" style="box-shadow:0 0 4px 3px rgba(0, 0, 0, 0.1);">
+			<div>
+				<h4><b>Order ID:</b> @Model.Id</h4>
+				<h4><b>Supplier:</b> @Model.SupplierName (@Model.SupplierCode)</h4>
+			</div>
+			<div>
+				<h5><b>Insert By:</b> @Model.InsertBy</h5>
+				<h5><b>Insert Date:</b> @Model.InsertTime</h5>
+			</div>
+		</div>
+	</div>
+	@foreach (var detail in Model.OrderDetails)
+	{
+		<div class="card-body mb-3" style="background-color: @(detail.Id.GetHashCode() % 2 == 0 ? "#f3f6f9" : "#ffffff"); border:1px solid #949494; box-shadow:0 0 4px 3px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden;">
+			<table class="table table-bordered" style="margin-bottom:-10px;">
+				<tbody>
+
+					<tr>
+						<td><b>SKU:</b> @detail.ProductCode</td>
+						<td><b>Quantity:</b> @detail.Quantity</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<table class="table table-sm table-bordered">
+								<thead>
+									<tr>
+										<th>Serial Number</th>
+										<th>Trace Code</th>
+										<th>QrCode Link</th>
+										<th>QrCode Image</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach (var item in detail.OrderDetailItems)
+									{
+										<tr>
+											<td>@item.SerialNumber</td>
+											<td>@item.TraceCode</td>
+											<td><a href="@item.QRCodeLink" target="_blank">@item.QRCodeLink</a></td>
+											<td><img src="data:image/png;base64,@item.QRCodeImage" alt="QR Code" /></td>
+										</tr>
+									}
+								</tbody>
+							</table>
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+
+		</div>
+	}
+</div>

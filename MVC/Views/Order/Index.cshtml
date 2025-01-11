@@ -1,0 +1,167 @@
+﻿@model IEnumerable<OrderVM>
+@{
+	ViewBag.ActiveTab = "Order";
+	int pageNumber = ViewBag.PageNumber ?? 1;
+	int totalPages = ViewBag.TotalPages ?? 1;
+}
+
+<div class="container my-4">
+	@if (TempData["ErrorMessage"] != null)
+	{
+		<div id="successMessage" class="alert alert-danger text-center">
+			@TempData["ErrorMessage"]
+		</div>
+	}
+
+	@if (TempData["SuccessMessage"] != null)
+	{
+		<div id="successMessage" class="alert alert-success text-center">
+			@TempData["SuccessMessage"]
+		</div>
+	}
+</div>
+<div class="container mt-3">
+	<div class="row mb-3">
+		<div class="col-md-6 d-flex justify-content-start">
+			<h3>All Orders</h3>
+		</div>
+		<div class="col-md-6 d-flex justify-content-end">
+			<button id="toggleAccordionButton" class="btn btn-secondary">Open All</button>
+		</div>
+	</div>
+	<hr />
+
+	<div class="accordion" id="orderAccordion">
+		@foreach (var order in Model)
+		{
+			<div class="accordion-item mb-2" style="border:none;">
+				<!-- Accordion Başlığı -->
+				<h2 class="accordion-header" id="heading-@order.Id">
+					<button class="accordion-button collapsed d-flex justify-content-between"
+							type="button" data-bs-toggle="collapse"
+							data-bs-target="#collapse-@order.Id" aria-expanded="false"
+							aria-controls="collapse-@order.Id"
+							style="background-color: @(order.Id % 2 == 0 ? "#e9ecef" : "#ffffff"); border: 1px solid #dee2e6; box-shadow:0 0 4px 1px rgba(0, 0, 0, 0.1); border-radius:10px;">
+						<div class="col-md-6">
+							<h3 class="mb-0">Order ID: @order.Id</h3>
+						</div>
+						<div class="col-md-6 text-end" style="margin-left:-40px;">
+							<h5 class="mb-0">
+								Mail Status:
+								@if (order.IsSent)
+								{
+									<span class="text-success">Mail Sent</span>
+								}
+								else
+								{
+									<span class="text-danger">Mail Not Sent</span>
+								}
+							</h5>
+						</div>
+					</button>
+				</h2>
+
+				<!-- Accordion İçeriği -->
+				<div id="collapse-@order.Id" class="accordion-collapse collapse" aria-labelledby="heading-@order.Id" style="border: 1px solid #dee2e6; border-radius:8px;">
+					<div class="accordion-body">
+						<div class="d-flex justify-content-between m-4">
+							<div>
+								<h4><b>Supplier:</b> @order.SupplierName (@order.SupplierCode)</h4>
+								<form asp-controller="operations" asp-action="SendMailExcelFile" method="post">
+									<input type="hidden" name="orderId" value="@order.Id" />
+									<button type="submit" class="btn btn-primary">Send Mail Excel File</button>
+								</form>
+							</div>
+							<div>
+								<h5><b>Insert By:</b> @order.InsertBy</h5>
+								<h5><b>Insert Date:</b> @order.InsertTime</h5>
+								@{
+									if (order.UpdateBy != null)
+									{
+										<div>
+											<h5><b>Update By:</b> @order.UpdateBy</h5>
+											<h5><b>Update Date:</b> @order.UpdateTime</h5>
+										</div>
+									}
+								}
+							</div>
+						</div>
+
+						<!-- Tablolar -->
+						<div class="container">
+							@foreach (var detail in order.OrderDetails)
+							{
+								<div class="card mb-3 border border-secondary">
+									<div class="card-body">
+										<table class="table table-striped table-bordered" style="margin-bottom:-4px;">
+											<tbody>
+												<tr>
+													<td><b>SKU:</b> @detail.ProductCode</td>
+													<td><b>Quantity:</b> @detail.Quantity</td>
+												</tr>
+												<tr>
+													<td colspan="2">
+														<table class="table table-sm table-striped table-bordered" style="margin-bottom:-3px;">
+															<thead>
+																<tr>
+																	<th>Serial Number</th>
+																	<th>Trace Code</th>
+																	<th>QR Code Link</th>
+																	<th>QR Code Image</th>
+																</tr>
+															</thead>
+															<tbody>
+																@foreach (var item in detail.OrderDetailItems)
+																{
+																	<tr>
+																		<td>@item.SerialNumber</td>
+																		<td>@item.TraceCode</td>
+																		<td>
+																			<a href="@item.QRCodeLink" target="_blank">@item.QRCodeLink</a>
+																		</td>
+																		<td>
+																			<img src="data:image/png;base64,@item.QRCodeImage" alt="QR Code" class="img-fluid" />
+																		</td>
+																	</tr>
+																}
+															</tbody>
+														</table>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							}
+						</div>
+
+					</div>
+				</div>
+			</div>
+		}
+	</div>
+
+	<!-- Sayfa Numaralandırma -->
+		<nav aria-label="Page navigation" class="d-flex justify-content-end mt-4">
+			<ul class="pagination">
+				@for (int i = 1; i <= totalPages; i++)
+				{
+					<li class="page-item @(i == pageNumber ? "active" : "")">
+						<a class="page-link" href="@Url.Action("Index", new { pageNumber = i })">@i</a>
+					</li>
+				}
+			</ul>
+		</nav>
+</div>
+
+<!-- Scroll to Top Button -->
+<button id="scrollToTopButton" class="btn btn-secondary rounded-circle" style="position: fixed; bottom: 62px; right: 13px; display: none;">
+	<i class="fas fa-arrow-up"></i>
+</button>
+
+<!-- Script for Toggle All Button -->
+@section Scripts {
+	@await Html.PartialAsync("_ValidationScriptsPartial")
+
+}
+

@@ -1,0 +1,93 @@
+﻿@model IEnumerable<SupplierVM>
+@{
+    ViewBag.ActiveTab = "Supplier";
+    int pageNumber = ViewBag.PageNumber ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
+}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between flex-wrap">
+        <h3>Suppliers</h3>
+        <div>
+            <a href="@Url.Action("AddSupplier", "Supplier")" class="btn btn-outline-primary">
+                <i class="bi bi-plus"></i> Yeni Tedarikçi Ekle
+            </a>
+        </div>
+    </div>
+    <hr />
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div id="successMessage" class="alert alert-success text-center">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div id="errorMessage" class="alert alert-danger text-center">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+    <div class="card mb-1">
+        <div class="card-header" style="box-shadow:0 0 4px 3px rgba(0, 0, 0, 0.1); border-radius:10px;">
+            <div class="row text-center text-md-start">
+                <div class="col-6 col-md-2"><b>Supplier ID</b></div>
+                <div class="col-6 col-md-2"><b>Supplier Code</b></div>
+                <div class="col-6 col-md-2"><b>Supplier Name</b></div>
+                <div class="col-6 col-md-3"><b>Notification To</b></div>
+                <div class="col-6 col-md-1"><b>Active</b></div>
+                <div class="col-6 col-md-2"><b>Actions</b></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        @if (Model != null)
+        {
+            foreach (var supplier in Model)
+            {
+                <div class="col-md-12 mb-1" >
+                    <div class="card">
+                        <div class="card-body py-2" style="background-color: @(supplier.Id % 2 == 0 ? "#e9ecef" : "#ffffff"); box-shadow:0 0 4px 3px rgba(0, 0, 0, 0.1); border-radius:10px;">
+                            <div class="row text-center text-md-start">
+                                <div class="col-6 col-md-2">
+                                    <p class="mb-1">@supplier.Id</p>
+                                </div>
+                                <div class="col-6 col-md-2">
+                                    <p class="mb-1">@supplier.SupplierCode</p>
+                                </div>
+                                <div class="col-6 col-md-2">
+                                    <p class="mb-1">@supplier.SupplierName</p>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    @foreach (var email in supplier.NotificationTo.Split(';'))
+                                    {
+                                        <p class="mb-1">@email</p>
+                                    }
+                                </div>
+                                <div class="col-6 col-md-1">
+                                    <p class="mb-1 @(supplier.Active ? "text-success" : "text-danger")">@supplier.Active</p>
+                                </div>
+                                <div class="col-6 col-md-2">
+                                    <a href="@Url.Action("UpdateSupplier", "Supplier", new { id = supplier.Id })" class="btn btn-primary btn-sm">Edit</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+        <nav aria-label="Page navigation" class="d-flex justify-content-end mt-4">
+            <ul class="pagination">
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <li class="page-item @(i == pageNumber ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("Index", new { pageNumber = i })">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

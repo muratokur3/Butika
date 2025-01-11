@@ -1,0 +1,41 @@
+﻿@using MVC.Helpers
+
+@inject UserService UserService
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h2>Kullanıcı Roller:</h2>
+@if (ViewBag.Claims != null && ViewBag.Claims.Count > 0)
+{
+    <ul>
+        @foreach (var claim in ViewBag.Claims)
+        {
+            <li>@claim.Type: @claim.Value</li>
+        }
+    </ul>
+}
+else
+{
+    <p>Claims bulunamadı.</p>
+}
+        <li>@ViewBag.UserRole</li>
+
+<h3>User Information</h3>
+<h2>Access Token:</h2>
+<p>@ViewBag.AccessToken</p>
+
+<h2>ID Token:</h2>
+<p>@ViewBag.IdToken</p>
+
+<p><strong>Username:</strong> @UserService.GetUserName()</p>
+<p><strong>Email:</strong> @UserService.GetUserEmail()</p>
+
+
+<h4>Claims:</h4>
+<ul>
+    @foreach (var claim in UserService.GetUserClaims())
+    {
+        <li>@claim.Type: @claim.Value</li>
+    }
+</ul>
