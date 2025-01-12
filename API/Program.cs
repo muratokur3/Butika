@@ -7,28 +7,27 @@ using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Mail;
 using System.Net;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using Infrastructure.Repositorys.AbstractRepositories;
+using Infrastructure.Repositorys.ConcreteRepositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var key = Encoding.UTF8.GetBytes("your_secret_key_here"); 
+//var key = Encoding.UTF8.GetBytes("your_secret_key_here"); 
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.RequireHttpsMetadata = false;  // HTTPS kullanmýyorsanýz
-        options.SaveToken = true;
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = false,  // Ýstediðiniz doðrulama yöntemlerine göre bu ayarý deðiþtirebilirsiniz
-            ValidateAudience = false,
-            ValidateLifetime = true,
-            IssuerSigningKey = new SymmetricSecurityKey(key),
-            ClockSkew = TimeSpan.Zero  // Token'ýn son geçerlilik süresi esnemesin
-        };
-    });
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//    .AddJwtBearer(options =>
+//    {
+//        options.RequireHttpsMetadata = false;  // HTTPS kullanmýyorsanýz
+//        options.SaveToken = true;
+//        options.TokenValidationParameters = new TokenValidationParameters
+//        {
+//            ValidateIssuer = false,  // Ýstediðiniz doðrulama yöntemlerine göre bu ayarý deðiþtirebilirsiniz
+//            ValidateAudience = false,
+//            ValidateLifetime = true,
+//            IssuerSigningKey = new SymmetricSecurityKey(key),
+//            ClockSkew = TimeSpan.Zero  // Token'ýn son geçerlilik süresi esnemesin
+//        };
+//    });
 
 builder.Services.AddAuthorization(); 
 
@@ -58,7 +57,6 @@ var smtpClient = new SmtpClient("smtp.gmail.com")
 };
 
 builder.Services.AddSingleton(smtpClient);
-builder.Services.AddControllers();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBusinessService, BusinessService>();
@@ -66,7 +64,7 @@ builder.Services.AddScoped<ISocialMediaService, SocialMediaService>();
 builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<IMailService, MailService>();
 
-
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // CORS policy settings
 string MyAllowOrigins = "_myAllowOrigins";

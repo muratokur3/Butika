@@ -12,4 +12,8 @@ public interface IBusinessRepository: IRepository<Business>
     Task<int> CountAsync();
     Task<List<Business>> GetByTagAsync(string tag);
     Task<List<Business>> SearchAsync(string searchTerm);
+    Task<IEnumerable<Business>> FindByApprovalStatusAsync(bool approvalStatus);
+    Task<Business> GetBusinessWithDetailsAsync(int businessId);
+    Task UpdateApprovalStatusAsync(int businessId, bool approvalStatus);
+
 }

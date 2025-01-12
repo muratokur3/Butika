@@ -1,13 +1,6 @@
-﻿using Application.Models.DTOs;
+﻿using Application.Models.DTOs.User;
 using Application.Services.AbstractServices;
-using Domain.Entities;
-using Infrastructure.Repositorys.AbstractRepositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace API.Controllers;
 

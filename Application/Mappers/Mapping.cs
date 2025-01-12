@@ -1,12 +1,7 @@
-﻿using Application.Models.DTOs;
+﻿using Application.Models.DTOs.User;
 using Application.Models.VMs;
 using AutoMapper;
 using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Mappers
 {
@@ -15,16 +10,27 @@ namespace Application.Mappers
 
         public Mapping()
         {
-            CreateMap<Business, BusinessVm>()
-                .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => string.Join(", ", src.Tags.Select(t => t.Name))));
+            CreateMap<AddBusinessDto, Business>()
+                      .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags))
+                      .ForMember(dest => dest.SocialMediaLinks, opt => opt.MapFrom(src => src.SocialMediaLinks));
+
+            CreateMap<TagDto, Tag>();
+            CreateMap<SocialMediaLinksDto, SocialMediaLinks>();
+            CreateMap<UserDto, User>();
+
 
             // Business to BusinessDto mapping
+            CreateMap<Business, AddBusinessDto>().ReverseMap();
             CreateMap<Business, BusinessDto>().ReverseMap();
+            CreateMap<Business, UpdateBusinessDto>().ReverseMap();
             CreateMap<Business, BusinessVm>().ReverseMap();
-            CreateMap<CreateBusinessVm, Business>();
+            CreateMap<Business, BusinessSummaryVm>().ReverseMap();
+            CreateMap<Business, BusinessVm>();
 
             // User to UserDto mapping
             CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<User, RegisterDto>().ReverseMap();
+            CreateMap<User, LoginDto>().ReverseMap();
             CreateMap<User, UserVm>().ReverseMap();
 
             // Tag to TagDto mapping

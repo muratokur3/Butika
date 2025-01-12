@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repositorys.AbstractRepositories;
 
-public interface IRepository<T>
+public interface IRepository<T> where T : class
 {
     Task<IEnumerable<T>> GetAllAsync();
-    Task<T> GetByIdAsync(int id);
-    Task<bool> AddAsync(T entity);
-    Task<bool> UpdateAsync(T entity);
-    Task<bool> DeleteAsync(T entity);
+    Task<T?> GetByIdAsync(int id);
+    Task AddAsync(T entity);
+    void Update(T entity);
+    void Delete(T entity);
 }

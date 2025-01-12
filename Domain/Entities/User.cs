@@ -9,9 +9,13 @@ namespace Domain.Entities;
 public class User
 {
     public int Id { get; set; }
-    public string Username { get; set; }
-    public string PasswordHash { get; set; }
+    public string FullName { get; set; }
     public string Email { get; set; }
-    public ICollection<Business> Businesses { get; set; } = new List<Business>();
-    public ClaimsIdentity? Name { get; set; }
+    public string PasswordHash { get; set; }
+    public string Role { get; set; }
+    public bool IsActive { get; set; }
+    public DateTime CreateDate { get; set; }
+
+    // Navigation Property
+    public ICollection<UserFavoriteBusiness> UserFavoriteBusinesses { get; set; } = new List<UserFavoriteBusiness>();
 }

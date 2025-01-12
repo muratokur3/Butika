@@ -18,95 +18,53 @@ public class BusinessService : IBusinessService
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
-    public async Task<List<BusinessDto>> GetAllBusinessesAsync()
-    {
-        var businesses = await _unitOfWork.Businesses.GetAllAsync();
-        return _mapper.Map<List<BusinessDto>>(businesses);
-    }
-    public async Task<BusinessDto> GetBusinessByIdAsync(int id)
-    {
-        var business = await _unitOfWork.Businesses.GetByIdAsync(id);
-        if (business == null)
-            return null;
 
-        return _mapper.Map<BusinessDto>(business);
-    }
-    public async Task AddBusinessAsync(AddBusinessDto businessDto)
+    public async Task<BusinessVm> AddBusinessAsync(AddBusinessDto addBusinessDto)
     {
-        var business = _mapper.Map<Business>(businessDto);
-        await _unitOfWork.Businesses.AddAsync(business);
+        var business = _mapper.Map<Business>(addBusinessDto);
+       var newBusiness= await _unitOfWork.Businesses.AddAsync(business);
+        return _mapper.Map<BusinessVm>(newBusiness);
     }
 
-    public async Task UpdateBusinessAsync(UpdateBusinessDto businessDto)
+    public Task<int> CountBusinessesAsync()
     {
-        var business = await _unitOfWork.Businesses.GetByIdAsync(businessDto.Id);
-        if (business != null)
-        {
-            _mapper.Map(businessDto, business); // DTO'dan Entity'ye dönüşüm
-            await _unitOfWork.Businesses.UpdateAsync(business);
-        }
+        return _unitOfWork.Businesses.CountAsync();
     }
 
     public async Task DeleteBusinessAsync(int id)
     {
-        var business = await _unitOfWork.Businesses.GetByIdAsync(id);
-        if (business != null)
-        {
-            await _unitOfWork.Businesses.DeleteAsync(business);
-        }
+        var entity = await _unitOfWork.Businesses.GetByIdAsync(id);
+        await _unitOfWork.Businesses.DeleteAsync(entity);
     }
 
-    public async Task<List<BusinessDto>> GetBusinessByTagAsync(string tag)
+    public async Task<IEnumerable<BusinessVm>> GetAllBusinessesAsync()
     {
         var businesses = await _unitOfWork.Businesses.GetAllAsync();
-        var filteredBusinesses = businesses
-            .Where(b => b.Tags.Any(t => t.Name.Contains(tag)))
-            .ToList();
-
-        return _mapper.Map<List<BusinessDto>>(filteredBusinesses);
+        return _mapper.Map<IEnumerable<BusinessVm>>(businesses);
     }
 
-    public async Task<List<BusinessDto>> SearchBusinessesAsync(string searchTerm)
+    public async Task<BusinessDto> GetBusinessByIdAsync(int id)
     {
-        var businesses = await _unitOfWork.Businesses.GetAllAsync();
-        var filteredBusinesses = businesses
-            .Where(b => b.Name.Contains(searchTerm) || b.ShortDescription.Contains(searchTerm))
-            .ToList();
-
-        return _mapper.Map<List<BusinessDto>>(filteredBusinesses);
+        var entity = await _unitOfWork.Businesses.GetByIdAsync(id);
+        return _mapper.Map<BusinessDto>(entity);
     }
 
-    public async Task<BusinessWithTagsVm> GetBusinessWithTagsAsync(int businessId)
+    public async Task<List<BusinessVm>> GetBusinessByTagAsync(string tag)
     {
-        var business = await _unitOfWork.Businesses.GetByIdAsync(businessId);
-        if (business == null)
-        {
-            return null;
-        }
-
-        var businessWithTagsVm = _mapper.Map<BusinessWithTagsVm>(business);
-        return businessWithTagsVm;
+        var businesses = _unitOfWork.Businesses.GetByTagAsync(tag);
+        return await Task.FromResult(_mapper.Map<List<BusinessVm>>(businesses));
     }
 
-    public async Task<int> CountBusinessesAsync()
+    public Task<List<BusinessVm>> SearchBusinessesAsync(string searchTerm)
     {
-        var count = await _unitOfWork.Businesses.CountAsync();
-        return count;
+        var businesses = _unitOfWork.Businesses.SearchAsync(searchTerm);
+        return Task.FromResult(_mapper.Map<List<BusinessVm>>(businesses));
     }
-    public async Task<bool> ValidateBusinessDataAsync(AddBusinessDto businessDto)
+
+    public Task<BusinessVm> UpdateBusinessAsync(UpdateBusinessDto businessDto)
     {
-        var existingBusinesses = await _unitOfWork.Businesses.GetAllAsync();
-        return existingBusinesses.All(b => b.Email != businessDto.Email && b.Name != businessDto.Name);
+        var business = _mapper.Map<Business>(businessDto);
+        var updatedBusiness = _unitOfWork.Businesses.UpdateAsync(business);
+        return Task.FromResult(_mapper.Map<BusinessVm>(updatedBusiness));
     }
-
-    public async Task<List<BusinessDto>> GetBusinessesByOwnerAsync(int ownerId)
-    {
-        var businesses = await _unitOfWork.Businesses.GetAllAsync();
-        var filteredBusinesses = businesses
-            .Where(b => b.OwnerId == ownerId)
-            .ToList();
-
-        return _mapper.Map<List<BusinessDto>>(filteredBusinesses);
-    }
-
 }

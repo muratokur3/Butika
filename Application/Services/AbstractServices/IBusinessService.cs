@@ -10,15 +10,12 @@ using System.Threading.Tasks;
 namespace Application.Services.AbstractServices;
 public interface IBusinessService
 {
-    Task<List<BusinessDto>> GetAllBusinessesAsync();
+    Task<IEnumerable<BusinessVm>> GetAllBusinessesAsync();
     Task<BusinessDto> GetBusinessByIdAsync(int id);
-    Task AddBusinessAsync(AddBusinessDto businessDto);
-    Task UpdateBusinessAsync(UpdateBusinessDto businessDto);
+    Task<BusinessVm> AddBusinessAsync(AddBusinessDto addBusinessDto);
+    Task<BusinessVm> UpdateBusinessAsync(UpdateBusinessDto businessDto);
     Task DeleteBusinessAsync(int id);
-    Task<List<BusinessDto>> GetBusinessByTagAsync(string tag);
-    Task<List<BusinessDto>> SearchBusinessesAsync(string searchTerm);
-    Task<BusinessWithTagsVm> GetBusinessWithTagsAsync(int businessId);
+    Task<List<BusinessVm>> GetBusinessByTagAsync(string tag);
+    Task<List<BusinessVm>> SearchBusinessesAsync(string searchTerm);
     Task<int> CountBusinessesAsync();
-    Task<bool> ValidateBusinessDataAsync(AddBusinessDto businessDto);
-    Task<List<BusinessDto>> GetBusinessesByOwnerAsync(int ownerId);
 }

@@ -9,6 +9,10 @@ namespace Infrastructure.Repositorys.AbstractRepositories
 {
     public interface IUserRepository: IRepository<User>
     {
-        Task<User> GetByEmailAsync(string email);
+        Task<User> FindByEmailAsync(string email);
+        Task<IEnumerable<User>> FindByRoleAsync(string role);
+        Task UpdatePasswordAsync(int userId, string newPassword);
+        Task ActivateUserAsync(int userId);
+
     }
 }

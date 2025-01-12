@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Domain.Entities;
 public class Tag
 {
     public int Id { get; set; }
-    public string Name { get; set; }
-    public int BusinessId { get; set; }
-    public Business Business { get; set; }
+    public string Name { get; set; } = string.Empty;
+
+    // Navigation Property
+    public ICollection<BusinessTag> BusinessTags { get; set; } = new List<BusinessTag>();
 }
