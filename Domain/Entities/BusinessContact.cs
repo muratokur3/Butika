@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,11 +10,12 @@ public class BusinessContact
 {
     public int Id { get; set; }
     public int BusinessId { get; set; }
-    public string ContactType { get; set; } = string.Empty; // e.g., "Email", "Phone"
-    public string ContactValue { get; set; } = string.Empty; // e.g., email address or phone number
-    public string Department { get; set; } = string.Empty; // e.g., "Sales", "Support"
+    public ContactType ContactType { get; set; } = 0;
+    public string ContactValue { get; set; }
+    public Department Department { get; set; } = 0;
     public bool Preferred { get; set; }
 
     // Navigation Property
     public Business Business { get; set; } = null!;
+
 }

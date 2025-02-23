@@ -1,9 +1,4 @@
-﻿using Application.Models.DTOs;
-using Application.Models.VMs;
-using Application.Services.AbstractServices;
-using Application.Services.ConcreteServices;
-using Domain.Entities;
-using Microsoft.AspNetCore.Http;
+﻿using Application.Services.AbstractServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;

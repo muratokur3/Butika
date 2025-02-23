@@ -8,5 +8,13 @@ public class BusinessShippingCompanyRepository : Repository<BusinessShippingComp
 {
     public BusinessShippingCompanyRepository(DbContext context) : base(context) { }
 
-    
+    public Task<IEnumerable<Business>> GetBusinessesForShippingCompanyAsync(int shippingCompanyId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<ShippingCompany>> GetShippingCompaniesForBusinessAsync(int businessId)
+    {
+        throw new NotImplementedException();
+    }
 }

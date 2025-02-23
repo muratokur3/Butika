@@ -9,6 +9,11 @@ public class BusinessTagRepository : Repository<BusinessTag>, IBusinessTagReposi
 {
     public BusinessTagRepository(DbContext context) : base(context) { }
 
+    public Task<IEnumerable<Business>> GetBusinessesForTagAsync(int tagId)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<IEnumerable<Tag>> GetTagsForBusinessAsync(int businessId)
     {
         throw new NotImplementedException();

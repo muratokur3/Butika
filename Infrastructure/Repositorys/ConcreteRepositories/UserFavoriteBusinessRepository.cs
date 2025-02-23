@@ -7,7 +7,10 @@ public class UserFavoriteBusinessRepository : Repository<UserFavoriteBusiness>, 
 {
     public UserFavoriteBusinessRepository(DbContext context) : base(context) { }
 
-   
+    public Task<int> GetBussinesFavoritesCountAsync(int businessId)
+    {
+        throw new NotImplementedException();
+    }
 
     public async Task<IEnumerable<Business>> GetFavoriteBusinessesAsync(int userId)
     {
@@ -22,6 +25,16 @@ public class UserFavoriteBusinessRepository : Repository<UserFavoriteBusiness>, 
             .Include(ufb => ufb.Business)
             .Select(ufb => ufb.Business)
             .ToListAsync();
+    }
+
+    public Task<int> GetUserFavoriteBusinessesCountAsync(int userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> IsUserFavoriteBusinessAsync(UserFavoriteBusiness userFavoriteBusiness)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task RemoveFavoriteAsync(int userId, int businessId)

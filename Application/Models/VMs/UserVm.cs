@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Models.VMs;
-public class UserVm
+namespace Application.Models.VMs
 {
-    public int Id { get; set; }
-    public string Username { get; set; }
-    public string Email { get; set; }
-    public List<BusinessSummaryVm> Businesses { get; set; }
+    public class UserVm
+    {
+
+    }
 }

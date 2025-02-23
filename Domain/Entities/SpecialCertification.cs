@@ -10,12 +10,12 @@ public class SpecialCertification
     public int Id { get; set; }
     public string Name { get; set; } = null!;
     public string Description { get; set; } = null!;
-    public string ImageUrl { get; set; } = null!;
-    public string IconUrl { get; set; } = null!;
+    public string? ImageUrl { get; set; } 
+    public string? IconUrl { get; set; } 
     public bool IsActive { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 
     // Navigation Properties
-    public ICollection<BusinessSpecialCertification> BusinessSpecialCertifications { get; set; } = null!;
+    public ICollection<BusinessSpecialCertification> BusinessSpecialCertifications { get; set; } = new List<BusinessSpecialCertification>();
 }

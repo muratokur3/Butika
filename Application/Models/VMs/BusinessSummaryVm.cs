@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Application.Models.VMs;
-public class BusinessSummaryVm
+public class BusinessSummaryVM
 {
     public int Id { get; set; }
     public string Name { get; set; }

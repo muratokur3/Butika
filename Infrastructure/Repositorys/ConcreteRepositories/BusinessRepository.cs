@@ -22,12 +22,11 @@ public class BusinessRepository : Repository<Business>, IBusinessRepository
 
     public async Task<IEnumerable<Business>> FindByApprovalStatusAsync(bool approvalStatus)
     {
-        return await _dbSet.Where(b => b.ApprovalStatus == approvalStatus).ToListAsync();
+        throw new NotImplementedException();
     }
     public async Task<Business> GetBusinessWithDetailsAsync(int businessId)
     {
         return await _dbSet
-            .Include(b => b.BusinessType)
             .Include(b => b.Contacts)
             .Include(b => b.BusinessTags).ThenInclude(bt => bt.Tag)
             .Include(b => b.BusinessMarketplaces).ThenInclude(bm => bm.Marketplace)
@@ -56,13 +55,11 @@ public class BusinessRepository : Repository<Business>, IBusinessRepository
 
     public async Task UpdateApprovalStatusAsync(int businessId, bool approvalStatus)
     {
-        var business = await _dbSet.FindAsync(businessId);
-        if (business == null)
-        {
-            throw new KeyNotFoundException("Business not found.");
-        }
+        throw new NotImplementedException();
+    }
 
-        business.ApprovalStatus = approvalStatus;
-        await _context.SaveChangesAsync();
+    public async Task<Business> UpdateBusinessBasicInfoAsync(Business entity)
+    {
+       return await Task.FromResult(_dbSet.Update(entity).Entity);
     }
 }

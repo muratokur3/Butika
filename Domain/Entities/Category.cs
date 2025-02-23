@@ -9,8 +9,8 @@ namespace Domain.Entities;
 public class Category
 {
     public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; set; }
 
     // Navigation Property
-    public ICollection<BusinessCategory> BusinessCategories { get; set; } = new List<BusinessCategory>();
+    public ICollection<BusinessCategory> BusinessCategories { get; set; }
 }

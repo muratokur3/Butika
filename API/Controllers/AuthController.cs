@@ -32,14 +32,6 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
     {
-        try
-        {
-            var user = await _userService.AuthenticateAsync(loginDto);
-            return Ok(new { token = user.Id });// buraya token bilgisi eklenmelidir.
-        }
-        catch (UnauthorizedAccessException)
-        {
-            return Unauthorized();
-        }
+        throw new NotImplementedException();
     }
 }

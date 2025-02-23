@@ -1,29 +1,24 @@
-﻿using Azure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using Domain.Enums;
 namespace Domain.Entities;
 public class Business
 {
     public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-    public string PasswordHash { get; set; } = string.Empty; 
-    public string Description { get; set; } = string.Empty;
-    public string SummaryDescription { get; set; } = string.Empty;
-    public string LogoUrl { get; set; }
-    public int EmployeeCount { get; set; }
-    public bool ApprovalStatus { get; set; }= false;
+    public string Name { get; set; } = null!;
+    public string Email { get; set; } = null!;
+    public string PasswordHash { get; set; } = null!;
+    public ApprovalStatus ApprovalStatus { get; set; }
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
-    public int BusinessTypeId { get; set; }
-    public DateTime FoundingDate { get; set; }
-    public string SocialImpactDescription { get; set; } = string.Empty;
+
+    // Opsiyonel Alanlar
+    public string? Description { get; set; }
+    public string? SummaryDescription { get; set; }
+    public string? LogoUrl { get; set; }
+    public int? EmployeeCount { get; set; }
+    public DateTime? FoundingDate { get; set; }
+    public string? SocialImpactDescription { get; set; }
+
 
     // Navigation Properties
-    public BusinessType BusinessType { get; set; } = null!;
     public ICollection<BusinessContact> Contacts { get; set; } = new List<BusinessContact>();
     public ICollection<BusinessTag> BusinessTags { get; set; } = new List<BusinessTag>();
     public ICollection<BusinessMarketplace> BusinessMarketplaces { get; set; } = new List<BusinessMarketplace>();

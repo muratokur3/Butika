@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 namespace Domain.Entities;
 public class BusinessHighlightFeature
 {
-    public int Id { get; set; }
     public int BusinessId { get; set; }
     public int HighlightFeatureId { get; set; }
 

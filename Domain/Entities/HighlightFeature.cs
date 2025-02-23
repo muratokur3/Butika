@@ -10,5 +10,5 @@ public class HighlightFeature
     public int Id { get; set; }
     public string Name { get; set; } = null!;
 
-    public ICollection<BusinessHighlightFeature> BusinessCampaigns { get; set; } = new List<BusinessHighlightFeature>();
+    public ICollection<BusinessHighlightFeature> BusinessCampaigns { get; set; } 
 }

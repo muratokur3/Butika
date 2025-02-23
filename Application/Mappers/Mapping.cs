@@ -1,4 +1,14 @@
-﻿using Application.Models.DTOs.User;
+﻿using Application.Models.DTOs.Branch;
+using Application.Models.DTOs.Business;
+using Application.Models.DTOs.Campaign;
+using Application.Models.DTOs.Category;
+using Application.Models.DTOs.Certification;
+using Application.Models.DTOs.Contact;
+using Application.Models.DTOs.HighlightFeature;
+using Application.Models.DTOs.MarketingChannel;
+using Application.Models.DTOs.Marketplace;
+using Application.Models.DTOs.ShippingCompany;
+using Application.Models.DTOs.Tag;
 using Application.Models.VMs;
 using AutoMapper;
 using Domain.Entities;
@@ -10,36 +20,47 @@ namespace Application.Mappers
 
         public Mapping()
         {
-            CreateMap<AddBusinessDto, Business>()
-                      .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags))
-                      .ForMember(dest => dest.SocialMediaLinks, opt => opt.MapFrom(src => src.SocialMediaLinks));
+            
 
-            CreateMap<TagDto, Tag>();
-            CreateMap<SocialMediaLinksDto, SocialMediaLinks>();
-            CreateMap<UserDto, User>();
+            // Business mapping
+            CreateMap<Business, BusinessDTO>().ReverseMap();
+            CreateMap<Business, RegisterBusinessDTO>().ReverseMap();
+            CreateMap<Business, BusinessBasicInfoDTO>().ReverseMap();
 
+            CreateMap<Business, BusinessVM>().ReverseMap();
+            CreateMap<Business, BusinessSummaryVM>().ReverseMap();
+            CreateMap<Business, BusinessDetailVM>().ReverseMap();
 
-            // Business to BusinessDto mapping
-            CreateMap<Business, AddBusinessDto>().ReverseMap();
-            CreateMap<Business, BusinessDto>().ReverseMap();
-            CreateMap<Business, UpdateBusinessDto>().ReverseMap();
-            CreateMap<Business, BusinessVm>().ReverseMap();
-            CreateMap<Business, BusinessSummaryVm>().ReverseMap();
-            CreateMap<Business, BusinessVm>();
+            //Tag
+            CreateMap<BusinessTag, BusinessTagDTO>().ReverseMap();
+            CreateMap<Tag, TagDTO>().ReverseMap();
 
-            // User to UserDto mapping
-            CreateMap<User, UserDto>().ReverseMap();
-            CreateMap<User, RegisterDto>().ReverseMap();
-            CreateMap<User, LoginDto>().ReverseMap();
-            CreateMap<User, UserVm>().ReverseMap();
+            //Contact
+            CreateMap<BusinessContact, ContactDTO>().ReverseMap();
 
-            // Tag to TagDto mapping
-            CreateMap<Tag, TagDto>().ReverseMap();
+            //Branch
+            CreateMap<Branch, BranchDTO>().ReverseMap();
 
-            // SocialMediaLinks mapping
-            CreateMap<SocialMediaLinks, SocialMediaLinksVm>().ReverseMap();
+            //Campaign
+            CreateMap<Campaign, CampaignDTO>().ReverseMap();
 
+            //Category
+            CreateMap<Category, CategoryDTO>().ReverseMap();
 
+            //Certification
+            CreateMap<SpecialCertification, CertificationDTO>().ReverseMap();
+
+            //HighlightFeature
+            CreateMap<HighlightFeature, HighlightFeatureDTO>().ReverseMap();
+
+            //MarketingChannel
+            CreateMap<MarketingChannel, MarketingChannelDTO>().ReverseMap();
+
+            //MarketPlace
+            CreateMap<Marketplace, MarketplaceDTO>().ReverseMap();
+
+            //ShippingCompany
+            CreateMap<ShippingCompany, ShippingCompanyDTO>().ReverseMap();
         }
     }
 }

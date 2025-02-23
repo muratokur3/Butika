@@ -14,6 +14,7 @@ public interface IBusinessRepository: IRepository<Business>
     Task<List<Business>> SearchAsync(string searchTerm);
     Task<IEnumerable<Business>> FindByApprovalStatusAsync(bool approvalStatus);
     Task<Business> GetBusinessWithDetailsAsync(int businessId);
+    Task <Business> UpdateBusinessBasicInfoAsync(Business entity);
     Task UpdateApprovalStatusAsync(int businessId, bool approvalStatus);
 
 }

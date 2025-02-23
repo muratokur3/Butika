@@ -1,8 +1,10 @@
-﻿using Application.Models.DTOs;
+﻿
 using Application.Models.VMs;
+using Application.Models.DTOs;
 using Application.Services.AbstractServices;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Application.Models.DTOs.Business;
 
 namespace API.Controllers;
 
@@ -10,13 +12,9 @@ namespace API.Controllers;
 [ApiController]
 public class BusinessController : ControllerBase
 {
-    private readonly IMapper _mapper;
     private readonly IBusinessService _businessService;
-
-    // Dependency Injection ile servislerin ve mapper'ın enjekte edilmesi
-    public BusinessController(IMapper mapper, IBusinessService businessService)
+    public BusinessController( IBusinessService businessService)
     {
-        _mapper = mapper;
         _businessService = businessService;
     }
 
@@ -24,37 +22,23 @@ public class BusinessController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllBusinesses()
     {
-        var businesses = await _businessService.GetAllBusinessesAsync(); // Veriyi alıyoruz
-        var businessVms = _mapper.Map<IEnumerable<BusinessVm>>(businesses); // Veriyi DTO'ya dönüştürüyoruz
-        return Ok(businessVms); // JSON formatında döndürüyoruz
-    }
-
-
-    [HttpGet]
-    public async Task<IActionResult> GetBusinessById(int id)
-    {
-        return Ok(await _businessService.GetBusinessByIdAsync(id));
+        var businesses = await _businessService.GetAllBusinessesAsync();
+        return Ok(businesses);
     }
 
 
     [HttpPost]
-    public async Task<IActionResult> CreateBusiness([FromBody] AddBusinessDto addBusinessDto)
+    public async Task<IActionResult> CreateBusiness([FromBody] RegisterBusinessDTO registerBusinessDTO)
     {
-        return Ok( await _businessService.AddBusinessAsync(addBusinessDto));
+   await _businessService.AddBusinessAsync(registerBusinessDTO);
+    return Ok();
     }
 
-
-    [HttpPut]
-    public async Task<IActionResult> UpdateBusiness(int id, [FromBody] UpdateBusinessDto updateBusinessDto)
+    [HttpPost]
+    public async Task<IActionResult> UpdateBusiness([FromBody] BusinessBasicInfoDTO businessBasicInfoDTO)
     {
-        var updatedBusiness = await _businessService.UpdateBusinessAsync(updateBusinessDto);
-        return NoContent();
+        var business = await _businessService.UpdateBusinessBasicInfoAsync(businessBasicInfoDTO);
+        return Ok(business);
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> DeleteBusiness(int id)
-    {
-        await _businessService.DeleteBusinessAsync(id); 
-        return NoContent(); 
-    }
 }

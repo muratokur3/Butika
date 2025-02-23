@@ -9,8 +9,8 @@ public class Branch
 {
     public int Id { get; set; }
     public int BusinessId { get; set; }
-    public string Location { get; set; } = string.Empty;
+    public string Location { get; set; }
 
     // Navigation Property
-    public Business Business { get; set; } = null!;
+    public Business Business { get; set; } 
 }

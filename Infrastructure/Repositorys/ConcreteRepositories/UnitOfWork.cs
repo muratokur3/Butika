@@ -7,90 +7,53 @@ using Microsoft.EntityFrameworkCore;
 namespace Infrastructure.Repositorys.ConcreteRepositories;
 public class UnitOfWork : IUnitOfWork
 {
-    private readonly DbContext _context;
-    private readonly IDictionary<Type, object> _repositories = new Dictionary<Type, object>();
-    private readonly IBusinessRepository _businessRepository;
-    private readonly IUserRepository _userRepository;
-    private readonly ICategoryRepository _categoryRepository;
-    private readonly IBusinessCategoryRepository _businessCategoryRepository;
-    private readonly IBusinessContactRepository _businessContactRepository;
-    private readonly ITagRepository _tagRepository;
-    private readonly IBusinessTagRepository _businessTagRepository;
-    private readonly IBusinessMarketplaceRepository _businessMarketplaceRepository;
-    private readonly IShippingCompanyRepository _shippingCompanyRepository;
-    private readonly IBusinessShippingCompanyRepository _businessShippingCompanyRepository;
-    private readonly ICampaignRepository _campaignRepository;
-    private readonly IBusinessCampaignRepository _businessCampaignRepository;
-    private readonly IBranchRepository _branchRepository;
-    private readonly IUserFavoriteBusinessRepository _setFavoriteBusinesses;
 
-    public UnitOfWork(DbContext context, IBusinessRepository businessRepository, IUserRepository userRepository, ICategoryRepository categoryRepository,
-        IBusinessCategoryRepository businessCategoryRepository,
-        IBusinessContactRepository businessContactRepository,
-        ITagRepository tagRepository,
-        IBusinessTagRepository businessTagRepository,
-        IBusinessMarketplaceRepository businessMarketplaceRepository,
-        IShippingCompanyRepository shippingCompanyRepository,
-        IBusinessShippingCompanyRepository businessShippingCompanyRepository,
-        ICampaignRepository campaignRepository,
-        IBusinessCampaignRepository businessCampaignRepository,
-        IBranchRepository branchRepository, IUserFavoriteBusinessRepository userFavoriteBusinesses)
+    private readonly AppDbContext _context;
+
+    public UnitOfWork(AppDbContext context)
     {
         _context = context;
-        _businessRepository = businessRepository;
-        _userRepository = userRepository;
-        _categoryRepository = categoryRepository;
-        _businessCategoryRepository = businessCategoryRepository;
-        _businessContactRepository = businessContactRepository;
-        _tagRepository = tagRepository;
-        _businessTagRepository = businessTagRepository;
-        _businessMarketplaceRepository = businessMarketplaceRepository;
-        _shippingCompanyRepository = shippingCompanyRepository;
-        _businessShippingCompanyRepository = businessShippingCompanyRepository;
-        _campaignRepository = campaignRepository;
-        _businessCampaignRepository = businessCampaignRepository;
-        _branchRepository = branchRepository;
-        _setFavoriteBusinesses = userFavoriteBusinesses;
     }
+    
 
-    public IBusinessRepository BusinessRepository => _businessRepository ?? new BusinessRepository(_context);
-    public IUserRepository UserRepository => _userRepository ?? new UserRepository(_context);
-    public ICategoryRepository CategoryRepository => _categoryRepository?? new CategoryRepository(_context);
-    public IBusinessCategoryRepository BusinessCategoryRepository => _businessCategoryRepository ?? new BusinessCategoryRepository(_context);
-    public IBusinessContactRepository BusinessContactRepository => _businessContactRepository?? new BusinessContactRepository(_context);
-    public ITagRepository TagRepository => _tagRepository?? new TagRepository(_context);
-    public IBusinessTagRepository BusinessTagRepository => _businessTagRepository?? new BusinessTagRepository(_context);
-    public IBusinessMarketplaceRepository BusinessMarketplaceRepository => _businessMarketplaceRepository?? new BusinessMarketplaceRepository(_context);
-    public IShippingCompanyRepository ShippingCompanyRepository => _shippingCompanyRepository?? new ShippingCompanyRepository(_context);
-    public IBusinessShippingCompanyRepository BusinessShippingCompanyRepository => _businessShippingCompanyRepository?? new BusinessShippingCompanyRepository(_context);
-    public ICampaignRepository CampaignRepository => _campaignRepository?? new CampaignRepository(_context);
-    public IBusinessCampaignRepository BusinessCampaignRepository => _businessCampaignRepository?? new BusinessCampaignRepository(_context);
-    public IBranchRepository BranchRepository => _branchRepository?? new BranchRepository(_context);
-    public IUserFavoriteBusinessRepository UserFavoriteBusinesses => _serFavoriteBusinesses?? new UserFavoriteBusinessRepository(_context);
+    private BusinessRepository _businesses;
+    private UserRepository _users;
+    private CategoryRepository _categories;
+    private BusinessCategoryRepository _businessCategories;
+    private BusinessContactRepository _businessContacts;
+    private TagRepository _tags;
+    private BusinessTagRepository _businessTags;
+    private MarketplaceRepository _marketplaces;
+    private BusinessMarketplaceRepository _businessMarketplaces;
+    private ShippingCompanyRepository _shippingCompanys;
+    private BusinessShippingCompanyRepository _businessShippingCompanys;
+    private MarketingChannelRepository _marketingChannels;
+    private HighlightFeatureRepository _highlightFeatures;
+    private CertificationRepository _certifications;
+    private CampaignRepository _campaigns;
+    private BusinessCampaignRepository _businessCampaigns;
+    private BranchRepository _branchs;
+    private UserFavoriteBusinessRepository _userFavoriteBusinesses;
 
-    public IRepository<T> Repository<T>() where T : class
-    {
-        if (_repositories.ContainsKey(typeof(T)))
-        {
-            return (IRepository<T>)_repositories[typeof(T)];
-        }
 
-        var repositoryType = typeof(Repository<>).MakeGenericType(typeof(T));
-
-        if (typeof(T) == typeof(Business))
-        {
-            repositoryType = typeof(BusinessRepository);
-        }
-        else if (typeof(T) == typeof(User))
-        {
-            repositoryType = typeof(UserRepository);
-        }
-
-        var repositoryInstance = Activator.CreateInstance(repositoryType, _context);
-        _repositories.Add(typeof(T), repositoryInstance);
-
-        return (IRepository<T>)repositoryInstance;
-    }
+    public IBusinessRepository Businesses => _businesses ??= new BusinessRepository(_context);
+    public IUserRepository Users => _users ??= new UserRepository(_context);
+    public ICategoryRepository Categories => _categories ??= new CategoryRepository(_context);
+    public IBusinessCategoryRepository BusinessCategories => _businessCategories ??= new BusinessCategoryRepository(_context);
+    public IBusinessContactRepository BusinessContacts => _businessContacts ??= new BusinessContactRepository(_context);
+    public ITagRepository Tags => _tags ??= new TagRepository(_context);
+    public IBusinessTagRepository BusinessTags => _businessTags ??= new BusinessTagRepository(_context);
+    public IMarketplaceRepository marketplaces => _marketplaces ??= new MarketplaceRepository(_context);
+    public IBusinessMarketplaceRepository BusinessMarketplaces => _businessMarketplaces ??= new BusinessMarketplaceRepository(_context);
+    public IShippingCompanyRepository ShippingCompanys => _shippingCompanys ??= new ShippingCompanyRepository(_context);
+    public IBusinessShippingCompanyRepository BusinessShippingCompanys => _businessShippingCompanys ??= new BusinessShippingCompanyRepository(_context);
+    public IMarketingChannelRepository MarketingChannels => _marketingChannels ??= new MarketingChannelRepository(_context);
+    public IHighlightFeatureRepository HighlightFeatures => _highlightFeatures ??=new HighlightFeatureRepository(_context);
+    public ICertificationRepository Certifications => _certifications ??= new CertificationRepository(_context);
+    public ICampaignRepository Campaigns => _campaigns ??= new CampaignRepository(_context);
+    public IBusinessCampaignRepository BusinessCampaigns => _businessCampaigns ??= new BusinessCampaignRepository(_context);
+    public IBranchRepository Branchs => _branchs ??= new BranchRepository(_context);
+    public IUserFavoriteBusinessRepository UserFavoriteBusinesses => _userFavoriteBusinesses ??= new UserFavoriteBusinessRepository(_context);
 
     public async Task CompleteAsync()
     {

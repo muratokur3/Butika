@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 namespace Domain.Entities;
 public class BusinessMarketplace
 {
-    public int Id { get; set; }
     public int BusinessId { get; set; }
     public int MarketplaceId { get; set; }
 

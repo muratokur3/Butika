@@ -1,5 +1,9 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using static System.Net.Mime.MediaTypeNames;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Diagnostics.Metrics;
+using System;
 
 namespace Infrastructure.Context
 {
@@ -18,7 +22,6 @@ namespace Infrastructure.Context
         public DbSet<Category> Categories { get; set; }
         public DbSet<BusinessCategory> BusinessCategories { get; set; }
         public DbSet<BusinessContact> BusinessContacts { get; set; }
-        public DbSet<BusinessType> BusinessTypes { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<BusinessTag> BusinessTags { get; set; }
         public DbSet<BusinessMarketplace> BusinessMarketplaces { get; set; }
@@ -64,6 +67,10 @@ namespace Infrastructure.Context
             modelBuilder.Entity<BusinessHighlightFeature>()
                 .HasKey(bhf => new { bhf.BusinessId, bhf.HighlightFeatureId });
 
+            modelBuilder.Entity<BusinessMarketingChannel>()
+           .HasKey(bmc => new { bmc.BusinessId, bmc.MarketingChannelId }); // Birincil anahtar tanımlaması
+
+          
             // Configure relationships
             modelBuilder.Entity<UserFavoriteBusiness>()
                 .HasOne(ufb => ufb.User)
@@ -123,13 +130,18 @@ namespace Infrastructure.Context
             modelBuilder.Entity<BusinessCampaign>()
                 .HasOne(bc => bc.Campaign)
                 .WithMany(c => c.BusinessCampaigns)
-                .HasForeignKey(bc => bc.CampaignId);
+                .HasForeignKey(bc => bc.CampaignId)
+                ;
+            modelBuilder.Entity<BusinessMarketingChannel>()
+              .HasOne(bmc => bmc.Business)
+              .WithMany(b => b.BusinessMarketingChannels)
+              .HasForeignKey(bmc => bmc.BusinessId);
 
+            modelBuilder.Entity<BusinessMarketingChannel>()
+                .HasOne(bmc => bmc.MarketingChannel)
+                .WithMany(mc => mc.BusinessMarketingChannels)
+                .HasForeignKey(bmc => bmc.MarketingChannelId);
 
-        }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server=A00184508;Database=butika;User Id=sa;Password=12345678;Integrated Security=False;TrustServerCertificate=True;");
         }
 
 

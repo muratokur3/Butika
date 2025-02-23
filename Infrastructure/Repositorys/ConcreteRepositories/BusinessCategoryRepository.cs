@@ -13,6 +13,16 @@ namespace Infrastructure.Repositorys.ConcreteRepositories
             throw new NotImplementedException();
         }
 
+        public Task<Business> GetBusinessByCategoryIdAsync(int categoryId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<BusinessCategory>> GetCategoriesForBusinessAsync(int businessId)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task RemoveCategoryFromBusinessAsync(BusinessCategory businessCategory)
         {
             throw new NotImplementedException();

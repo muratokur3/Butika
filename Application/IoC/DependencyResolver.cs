@@ -12,9 +12,19 @@ namespace Application.IoC
         {
             builder.RegisterType<BusinessService>().As<IBusinessService>();
             builder.RegisterType<UserService>().As<IUserService>();
+            builder.RegisterType<ContactService>().As<IContactService>();
             builder.RegisterType<SocialMediaService>().As<ISocialMediaService>();
             builder.RegisterType<TagService>().As<ITagService>();
             builder.RegisterType<MailService>().As<IMailService>();
+            builder.RegisterType<BranchService>().As<IBranchService>();
+            builder.RegisterType<CampaignService>().As<ICampaignService>();
+            builder.RegisterType<CategoryService>().As<ICategoryService>();
+            builder.RegisterType<CertificationService>().As<ICertificationService>();
+            builder.RegisterType<FeatureService>().As<IFeatureService>();
+            builder.RegisterType<MarketingChannelService>().As<IMarketingChannelService>();
+            builder.RegisterType<MarketplaceService>().As<IMarketplaceService>();
+            builder.RegisterType<CompanyService>().As<ICompanyService>();
+
 
             builder.Register(context => new  MapperConfiguration(config =>
             {
@@ -29,7 +39,6 @@ namespace Application.IoC
 
                 return config.CreateMapper(context.Resolve);
             }).As<IMapper>().InstancePerLifetimeScope();
-
         }
     }
 }

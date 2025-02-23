@@ -9,25 +9,9 @@ using System.Net.Mail;
 using System.Net;
 using Infrastructure.Repositorys.AbstractRepositories;
 using Infrastructure.Repositorys.ConcreteRepositories;
+using Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
-
-//var key = Encoding.UTF8.GetBytes("your_secret_key_here"); 
-
-//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//    .AddJwtBearer(options =>
-//    {
-//        options.RequireHttpsMetadata = false;  // HTTPS kullanmýyorsanýz
-//        options.SaveToken = true;
-//        options.TokenValidationParameters = new TokenValidationParameters
-//        {
-//            ValidateIssuer = false,  // Ýstediðiniz doðrulama yöntemlerine göre bu ayarý deðiþtirebilirsiniz
-//            ValidateAudience = false,
-//            ValidateLifetime = true,
-//            IssuerSigningKey = new SymmetricSecurityKey(key),
-//            ClockSkew = TimeSpan.Zero  // Token'ýn son geçerlilik süresi esnemesin
-//        };
-//    });
 
 builder.Services.AddAuthorization(); 
 
@@ -48,21 +32,23 @@ builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
     builder.RegisterModule(new DependencyResolver());
 });
 
-// SMTP client configuration
-var smtpClient = new SmtpClient("smtp.gmail.com")
-{
-    Port = 587,
-    Credentials = new NetworkCredential(""),
-    EnableSsl = true,
-};
 
-builder.Services.AddSingleton(smtpClient);
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBusinessService, BusinessService>();
 builder.Services.AddScoped<ISocialMediaService, SocialMediaService>();
-builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<IMailService, MailService>();
+builder.Services.AddScoped<IContactService, ContactService>();
+builder.Services.AddScoped<IBranchService, BranchService>();
+builder.Services.AddScoped<ICampaignService, CampaignService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICertificationService, CertificationService>();
+builder.Services.AddScoped<IFeatureService, FeatureService>();
+builder.Services.AddScoped<IMarketingChannelService, MarketingChannelService>();
+builder.Services.AddScoped<IMarketplaceService, MarketplaceService>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
+builder.Services.AddScoped<ITagService, TagService>();
+
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
